@@ -4,16 +4,28 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * the main idea of the program is that
+ * when we find the correct path
+ * all of the relative path are in the stack
+ * then we get them and get the answer.
+ * 
+ * @author KINGFISH
+ *
+ */
 public class Tree {
 	
 	private LinkedList<Edge> edgeList=new LinkedList<Edge>();
-	private LinkedList<Edge> backupEdgeList=null;
 	private Stack<Edge> edgeStack=new Stack<Edge>();
 	private LinkedList<Integer> nodeList=new LinkedList<Integer>();
 	private int distance;
 	
 	public void addEdge(int left, int right, int length){
 		edgeList.add(new Edge(left,right,length));
+	}
+	
+	public void addEdge(Edge edge){
+		edgeList.add(edge);
 	}
 	
 	public Edge removeEdge(int left,int right){
@@ -27,12 +39,7 @@ public class Tree {
 		return null;
 	}
 	
-	public void addEdge(Edge edge){
-		edgeList.add(edge);
-	}
-	
-	
-	public Edge findEdge(int node){
+	private Edge findEdge(int node){
 		for(Edge edge:edgeList){
 			if(edge.hasNode(node))
 				return edge;
@@ -41,63 +48,70 @@ public class Tree {
 		return null;
 	}
 		
-	public int getDisance(int start,int end){
-		backupEdgeList=(LinkedList<Edge>) edgeList.clone();
-		this._getDistance(start, end);
-		this.edgeList=backupEdgeList;
+	public int getDistance(int start, int end){
+		this.processCore(start, end);
+		
 		System.out.println("DIST "+start+" "+end+" = "+distance);
 		return this.distance;
 	}
 	
-	private void _getDistance(int start,int end){
+	public int getKth(int start,int end ,int k){
+		this.processCore(start, end);
+		
+		System.out.println("KTH "+start+" "+end+" "+k+" = "+nodeList.get(k-1));
+		return nodeList.get(k-1);
+	}
+	
+	private void processCore(int start,int end){
+		clearAll();
+		
+		try{
+			this.findPath(start, end);
+		}catch(Exception e){
+			
+			this.recordDistance();
+			this.recordNodePath(start);
+			
+			while(!edgeStack.isEmpty()){
+				edgeList.add(edgeStack.pop());
+			}
+		}
+	}
+	
+	private void findPath(int start,int end) throws Exception{
 		Edge edge=null;
 		
 		//if there is still path can be find
 		while((edge=this.findEdge(start))!=null){
 			edgeList.remove(edge);
 			edgeStack.push(edge);
-			//'System.out.println("we push "+edge);
 			
 			//if we find the final node
 			if(edge.getOtherPole(start)==end){
-				this.recordDistance();
-				this.recordNodePath(end);
-				this.edgeList.clear();
-				return;
+				throw new Exception("find the correct path.");
 			}
 			
-			_getDistance(edge.getOtherPole(start),end);
+			findPath(edge.getOtherPole(start),end);
 			
 			if(!edgeStack.isEmpty()){
 				Edge e=edgeStack.pop();
-				//System.out.println("we pop "+e);
 			}
 		}
 	}
 	
-	
-	public int getKth(int start,int end ,int k){
-		backupEdgeList=(LinkedList<Edge>) edgeList.clone();
-		this._getDistance(start, end);
-		this.edgeList=backupEdgeList;
+	private void recordNodePath(int start){
+		nodeList.clear();
 		
-		System.out.println("KTH "+start+" "+end+" "+k+" = "+nodeList.get(k-1));
-		return nodeList.get(k-1);
-	}
-	
-	private void recordNodePath(int end){
-		int tempEnd=end;
-		nodeList.addFirst(tempEnd);
+		int tempStart=start;
+		nodeList.addFirst(tempStart);
 		
-		while(!edgeStack.isEmpty()){
-			Edge edge=edgeStack.pop();
-			nodeList.addFirst(edge.getOtherPole(tempEnd));
-			tempEnd=edge.getOtherPole(tempEnd);
+		for(Edge edge:edgeStack){
+			nodeList.add(edge.getOtherPole(tempStart));
+			tempStart=edge.getOtherPole(tempStart);
 		}
 	}
 	
 	private void recordDistance(){
-		
 		for(Edge edge:edgeStack){
 			distance+=edge.getLength();
 		}
@@ -105,6 +119,12 @@ public class Tree {
 	
 	public List<Integer> getNodeList(){
 		return this.nodeList;
+	}
+	
+	private void clearAll(){
+		this.nodeList.clear();
+		this.distance=0;
+		this.edgeStack.clear();
 	}
 	
 	

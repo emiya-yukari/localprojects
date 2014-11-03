@@ -1,6 +1,11 @@
 package com.emiya.projects.localprojects.sysdesign.the3rd;
 
-
+/**
+ * the interface of the program
+ * 
+ * @author KINGFISH
+ *
+ */
 public class Main {
 
 	//we use this to instead the input.txt and use the console
@@ -14,7 +19,7 @@ public class Main {
 		tree.addEdge(1, 2, 1);
 		tree.addEdge(3, 6, 2);
 		
-		tree.getDisance(4, 6);
+		tree.getDistance(4, 6);
 		tree.getKth(4, 6, 4);
 	}
 }

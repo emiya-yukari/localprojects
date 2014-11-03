@@ -1,5 +1,11 @@
 package com.emiya.projects.localprojects.sysdesign.the3rd;
 
+/**
+ * the edge has two pole(node) and some relative service.
+ * 
+ * @author KINGFISH
+ *
+ */
 public class Edge {
 
 	public final static int ERROR=-1;
