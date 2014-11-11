@@ -2,21 +2,23 @@ package com.emiya.projects.localprojects.sysdesign.the4th;
 
 public class Box {
 	private GameMap gameMap;
-	private BoxStatus status;
+	private int row,column;
 	
 	public Box(GameMap gameMap) throws Exception{
 		
-		status=findBox(gameMap);
+		findBox(gameMap);
 		
 		this.gameMap=gameMap;
 	}
 	
-	private BoxStatus findBox(GameMap gameMap) throws Exception{
+	private void findBox(GameMap gameMap) throws Exception{
 		
 		for(int i=0;i<gameMap.getRowsLength();i++){
 			for(int j=0;j<gameMap.getColumnsLength();j++){
 				if(gameMap.getCell(i, j)==GameMap.BOX){
-					return new BoxStatus(i,j);
+					row=i;
+					column=j;
+					return;
 				}
 			}
 		}
@@ -25,16 +27,25 @@ public class Box {
 	}
 	
 	public BoxStatus getStatus(){
-		return status;
+		return new BoxStatus(row,column);
 	}
 	
-	public void setBoxStatus(BoxStatus theStatus){
-		status=theStatus;
+	public void setBoxStatus(BoxStatus status){
+		this.row=status.getRow();
+		this.column=status.getColumn();
 	}
 	
 	public BoxStatus move(){
 		
 		return null;
+	}
+	
+	public int getRow(){
+		return row;
+	}
+	
+	public int getColumn(){
+		return column;
 	}
 	
 	

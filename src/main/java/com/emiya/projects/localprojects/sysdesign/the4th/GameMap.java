@@ -3,12 +3,16 @@ package com.emiya.projects.localprojects.sysdesign.the4th;
 public class GameMap {
 	
 	public final static String BLOCK="#";
-	public final static String MAN="c";
+	public final static String MAN="C";
 	public final static String EMPTY=" ";
-	public final static String BOX="b";
+	public final static String BOX="B";
+	public final static String TARGET="T";
+	public final static String ERROR="R";
 	
 	private int rows, columns;
 	private String[][] gameMap;
+	private Target target;
+	
 	
 	public GameMap(int rows, int columns){
 		this.rows=rows;
@@ -17,8 +21,8 @@ public class GameMap {
 		gameMap=new String[rows][];
 	}
 	
-	public String[][] getStatus(){
-		return gameMap.clone();
+	public MapStatus getStatus(){
+		return new MapStatus(gameMap.clone());
 	}
 	
 	public void addRow(int row,String[] rowContent){
@@ -48,7 +52,37 @@ public class GameMap {
 	}
 	
 	public String getCell(int row, int column){
-		return gameMap[row][column];
+		String cellContent=null;
+		try{
+			cellContent=gameMap[row][column];
+		}catch(Exception e){
+			cellContent=ERROR;
+		}
+		return cellContent;
+	}
+	
+	public void setStatus(MapStatus status){
+		this.gameMap=status.getGameMap();
+	}
+	
+	public Target getTarget() throws Exception{
+		if(target==null){
+			target=findTarget();
+		}
+		
+		return target;
+	}
+	
+	private Target findTarget() throws Exception{
+		for(int i=0;i<this.getRowsLength();i++){
+			for(int j=0;j<this.getColumnsLength();j++){
+				if(this.getCell(i, j)==GameMap.TARGET){
+					return new Target(i,j);
+				}
+			}
+		}
+		
+		throw new Exception("no target.");
 	}
 	
 	

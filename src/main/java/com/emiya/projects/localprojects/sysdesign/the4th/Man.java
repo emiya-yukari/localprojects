@@ -3,19 +3,20 @@ package com.emiya.projects.localprojects.sysdesign.the4th;
 public class Man {
 	
 	private GameMap gameMap;
-	private ManStatus status;
+	private int row,column;
 	
 	public Man(GameMap gameMap) throws Exception{
-		status=this.findMan(gameMap);
+		findMan(gameMap);
 		this.gameMap=gameMap;
 	}
 	
-	private ManStatus findMan(GameMap gameMap) throws Exception{
+	private void findMan(GameMap gameMap) throws Exception{
 		
 		for(int i=0;i<gameMap.getRowsLength();i++){
 			for(int j=0;j<gameMap.getColumnsLength();j++){
 				if(gameMap.getCell(i, j)==GameMap.MAN){
-					return new ManStatus(i,j);
+					row=i;
+					column=j;
 				}
 			}
 		}
@@ -24,11 +25,20 @@ public class Man {
 	}
 	
 	public ManStatus getStatus(){
-		return this.status;
+		return new ManStatus(row,column);
 	}
 	
 	public void setStatus(ManStatus status){
-		this.status=status;
+		this.row=status.getRow();
+		this.column=status.getColumn();
+	}
+	
+	public int getRow(){
+		return this.row;
+	}
+	
+	public int getColumn(){
+		return column;
 	}
 	
 	
