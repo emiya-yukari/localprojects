@@ -17,6 +17,10 @@ public class GameMap {
 		gameMap=new String[rows][];
 	}
 	
+	public String[][] getStatus(){
+		return gameMap.clone();
+	}
+	
 	public void addRow(int row,String[] rowContent){
 		gameMap[row]=rowContent;
 	}
@@ -41,6 +45,10 @@ public class GameMap {
 			
 			System.out.println();
 		}
+	}
+	
+	public String getCell(int row, int column){
+		return gameMap[row][column];
 	}
 	
 	
