@@ -87,14 +87,23 @@ public class PathTool {
 		
 		Path miniPath=new Path();
 		PathCell currentCell=new PathCell(theMap.getTarget().getRow(),theMap.getTarget().getColumn());
+		
+		
+		if(theMap.getCell(currentCell.getRow(), currentCell.getColumn()).equals("0")){
+			miniPath.addCell(currentCell);
+			return miniPath;
+		}
+			
 		PathCell lowerCell=null;
 		
 		while((lowerCell=getLowerCellAround(currentCell,theMap))!=null){
 			if(theMap.getCell(lowerCell.getRow(), lowerCell.getColumn()).equals("0")){
+				miniPath.addCell(lowerCell);
 				return miniPath;
 			}
 			
 			miniPath.addCell(lowerCell);
+			currentCell=lowerCell;
 		}
 		
 		return null;

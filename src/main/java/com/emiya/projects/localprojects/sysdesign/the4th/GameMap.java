@@ -24,7 +24,12 @@ public class GameMap {
 	}
 	
 	public GameMap(int rows, int columns, String[][] gameMap, Man man, Box box, Target target){
-		
+		this.rows=rows;
+		this.columns=columns;
+		this.gameMap=gameMap;
+		this.man=man;
+		this.box=box;
+		this.target=target;
 	}
 	
 	public void addRow(int row,String[] rowContent){
@@ -51,10 +56,12 @@ public class GameMap {
 			
 			System.out.println();
 		}
+		
+		System.out.println("<--------->");
 	}
 	
 	public String getCell(int row, int column){
-		String cellContent=null;
+		String cellContent;
 		try{
 			cellContent=gameMap[row][column];
 		}catch(Exception e){
@@ -71,7 +78,7 @@ public class GameMap {
 		
 		for(int i=0;i<this.getRowsLength();i++){
 			for(int j=0;j<this.getColumnsLength();j++){
-				if(this.getCell(i, j)==GameMap.MAN){
+				if(this.getCell(i, j)==GameMap.BOX){
 					return new Box(i,j);
 				}
 			}
@@ -107,12 +114,17 @@ public class GameMap {
 	}
 	
 	public boolean isEmpty(int row, int column){
-		return this.getCell(row, column).equals(EMPTY)||this.getCell(row, column).equals(TARGET);
+		return this.getCell(row, column)==EMPTY||this.getCell(row, column)==TARGET||this.getCell(row, column)==BOX;
 	}
 	
 	@Override
 	public GameMap clone(){
-		return new GameMap(rows,columns, gameMap.clone(), man.clone(), box.clone(),target.clone());
+		String[][] cln=new String[rows][];
+		for(int i=0;i<rows;i++){
+			cln[i]=gameMap[i].clone();
+		}
+		
+		return new GameMap(rows,columns, cln, man.clone(), box.clone(),target.clone());
 	}
 	
 	public boolean hasArrived() throws Exception{

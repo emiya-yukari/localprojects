@@ -3,7 +3,7 @@ package com.emiya.projects.localprojects.sysdesign.the4th;
 import java.util.LinkedList;
 
 
-public class Path {
+public class Path implements Comparable<Path>{
 	
 	private LinkedList<PathCell> cellList=new LinkedList<PathCell>();
 	
@@ -72,6 +72,14 @@ public class Path {
 	
 	public void removePath(Path path){
 		this.cellList.removeAll(path.getCellList());
+	}
+	
+	public int size(){
+		return cellList.size();
+	}
+
+	public int compareTo(Path o) {
+		return this.size()>o.size()?1:-1;
 	}
 	
 }

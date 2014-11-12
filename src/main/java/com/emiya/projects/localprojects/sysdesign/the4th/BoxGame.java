@@ -44,7 +44,7 @@ public class BoxGame {
 		
 		Stack<PathCell> boxNextStepStack=null;
 		
-		boxNextStepStack=StepTool.getNextStep(gameMap.getBox().getRow(), gameMap.getBox().getColumn(), gameMap.getTarget().getRow(), gameMap.getTarget().getColumn(), gameMap);
+		boxNextStepStack=StepTool.getMiniNextStep(gameMap.getBox().getRow(), gameMap.getBox().getColumn(), gameMap.getTarget().getRow(), gameMap.getTarget().getColumn(), gameMap);
 
 		PathCell nextStep=null;
 			

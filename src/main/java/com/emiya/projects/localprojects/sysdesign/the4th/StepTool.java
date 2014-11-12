@@ -1,7 +1,6 @@
 package com.emiya.projects.localprojects.sysdesign.the4th;
 
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Stack;
 
 public class StepTool {
@@ -38,5 +37,41 @@ public class StepTool {
 	
 	private static boolean isEmpty(PathCell cell,GameMap gameMap){
 		return gameMap.isEmpty(cell.getRow(), cell.getColumn());
+	}
+	
+	public static Stack<PathCell> getMiniNextStep(int startRow, int startColumn, int endRow, int endColumn, GameMap gameMap){
+		
+		LinkedList<Path> pathList=new LinkedList<Path>();
+		LinkedList<PathCell> cellList=new LinkedList<PathCell>();
+		Stack<PathCell> stack=new Stack<PathCell>();
+		
+		PathCell pointCell=new PathCell(startRow,startColumn);
+		
+		cellList.add(pointCell.getUp());
+		cellList.add(pointCell.getDown());
+		cellList.add(pointCell.getLeft());
+		cellList.add(pointCell.getRight());
+		
+		//排除不能直接走的
+		for(int i=0;i<cellList.size();i++){
+			PathCell cell=cellList.get(i);
+			if(!gameMap.isEmpty(cell.getRow(), cell.getColumn())){
+				cellList.remove(i);
+				i--;
+			}
+		}
+		
+		//加入走得到的并且排序
+		for(PathCell cell:cellList){
+			Path path=PathTool.getMiniPath(cell.getRow(), cell.getColumn(), endRow, endColumn, gameMap);
+			if(path!=null)
+				pathList.add(path);
+		}
+		
+		//加入下一步
+		for(Path tempPath:pathList)
+			stack.push(tempPath.getFirstCell());
+		
+		return stack;
 	}
 }
