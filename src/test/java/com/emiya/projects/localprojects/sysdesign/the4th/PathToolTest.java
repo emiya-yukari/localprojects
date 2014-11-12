@@ -41,9 +41,9 @@ public class PathToolTest extends TestCase{
         Path path=new Path();
         
         try{
-        Box box=new Box(gameMap);
-        
-        PathTool.hasPath(box.getRow(), box.getColumn(), gameMap.getTarget().getRow(), gameMap.getTarget().getColumn(), gameMap, path);
+//        Box box=new Box();
+//        
+//        PathTool.hasPath(box.getRow(), box.getColumn(), gameMap.getTarget().getRow(), gameMap.getTarget().getColumn(), gameMap, path);
         
         System.out.println("unable.");
         }catch(Exception e){

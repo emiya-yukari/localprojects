@@ -133,5 +133,9 @@ public class GameMap {
 		return this.man;
 	}
 	
+	public String[][] getGameMap(){
+		return this.gameMap;
+	}
+	
 	
 }
