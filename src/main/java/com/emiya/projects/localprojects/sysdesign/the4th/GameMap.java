@@ -12,6 +12,8 @@ public class GameMap {
 	private int rows, columns;
 	private String[][] gameMap;
 	private Target target;
+	private Box box;
+	private Man man;
 	
 	
 	public GameMap(int rows, int columns){
@@ -21,8 +23,8 @@ public class GameMap {
 		gameMap=new String[rows][];
 	}
 	
-	public MapStatus getStatus(){
-		return new MapStatus(gameMap.clone());
+	public GameMap(int rows, int columns, String[][] gameMap, Man man, Box box, Target target){
+		
 	}
 	
 	public void addRow(int row,String[] rowContent){
@@ -61,16 +63,35 @@ public class GameMap {
 		return cellContent;
 	}
 	
-	public void setStatus(MapStatus status){
-		this.gameMap=status.getGameMap();
+	public Target getTarget(){		
+		return target;
 	}
 	
-	public Target getTarget() throws Exception{
-		if(target==null){
-			target=findTarget();
+	private Box findBox() throws Exception{
+		
+		for(int i=0;i<this.getRowsLength();i++){
+			for(int j=0;j<this.getColumnsLength();j++){
+				if(this.getCell(i, j)==GameMap.MAN){
+					return new Box(i,j);
+				}
+			}
 		}
 		
-		return target;
+		throw new Exception("no box."); 
+	}
+	
+	
+	public Man findMan() throws Exception{
+		
+		for(int i=0;i<this.getRowsLength();i++){
+			for(int j=0;j<this.getColumnsLength();j++){
+				if(this.getCell(i, j)==GameMap.MAN){
+					return new Man(i,j);
+				}
+			}
+		}
+		
+		throw new Exception("no man."); 
 	}
 	
 	private Target findTarget() throws Exception{
@@ -83,6 +104,33 @@ public class GameMap {
 		}
 		
 		throw new Exception("no target.");
+	}
+	
+	public boolean isEmpty(int row, int column){
+		return this.getCell(row, column).equals(EMPTY)||this.getCell(row, column).equals(TARGET);
+	}
+	
+	@Override
+	public GameMap clone(){
+		return new GameMap(rows,columns, gameMap.clone(), man.clone(), box.clone(),target.clone());
+	}
+	
+	public boolean hasArrived() throws Exception{
+		return this.getBox().getRow()==this.getTarget().getRow()&&this.getBox().getColumn()==this.getTarget().getColumn();
+	}
+	
+	public void init() throws Exception{
+		this.box=this.findBox();
+		this.target=this.findTarget();
+		this.man=this.findMan();
+	}
+	
+	public Box getBox(){
+		return this.box;
+	}
+	
+	public Man getMan(){
+		return this.man;
 	}
 	
 	

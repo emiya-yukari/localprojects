@@ -2,35 +2,11 @@ package com.emiya.projects.localprojects.sysdesign.the4th;
 
 public class Man {
 	
-	private GameMap gameMap;
 	private int row,column;
 	
-	public Man(GameMap gameMap) throws Exception{
-		findMan(gameMap);
-		this.gameMap=gameMap;
-	}
-	
-	private void findMan(GameMap gameMap) throws Exception{
-		
-		for(int i=0;i<gameMap.getRowsLength();i++){
-			for(int j=0;j<gameMap.getColumnsLength();j++){
-				if(gameMap.getCell(i, j)==GameMap.MAN){
-					row=i;
-					column=j;
-				}
-			}
-		}
-		
-		throw new Exception("no man."); 
-	}
-	
-	public ManStatus getStatus(){
-		return new ManStatus(row,column);
-	}
-	
-	public void setStatus(ManStatus status){
-		this.row=status.getRow();
-		this.column=status.getColumn();
+	public Man(int row, int column){
+		this.row=row;
+		this.column=column;
 	}
 	
 	public int getRow(){
@@ -41,6 +17,26 @@ public class Man {
 		return column;
 	}
 	
+	public void setRow(int row){
+		this.row=row;
+	}
 	
+	public void setColumn(int column){
+		this.column=column;
+	}
+	
+	@Override
+	public Man clone(){
+		return new Man(row,column);
+	}
+	
+	public void setCell(PathCell cell){
+		this.row=cell.getRow();
+		this.column=cell.getColumn();
+	}
+	
+	public PathCell getCell(){
+		return new PathCell(this.row,this.column);
+	}
 	
 }

@@ -7,6 +7,10 @@ public class Path {
 	
 	private LinkedList<PathCell> cellList=new LinkedList<PathCell>();
 	
+	public LinkedList<PathCell> getCellList(){
+		return this.cellList;
+	}
+	
 	public void addCell(int row, int column){
 		cellList.add(new PathCell(row,column));
 	}
@@ -56,6 +60,18 @@ public class Path {
 		for(PathCell tempCell:cellList)
 			System.out.print("( "+(tempCell.getRow()+1)+" , "+(tempCell.getColumn()+1)+" )->");
 		System.out.println();
+	}
+	
+	public boolean isEmpty(){
+		return cellList.isEmpty();
+	}
+	
+	public void addPath(Path path){
+		this.cellList.addAll(path.getCellList());
+	}
+	
+	public void removePath(Path path){
+		this.cellList.removeAll(path.getCellList());
 	}
 	
 }

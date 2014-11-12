@@ -16,4 +16,9 @@ public class Target {
 	public int getColumn(){
 		return column;
 	}
+	
+	@Override
+	public Target clone(){
+		return new Target(row,column);
+	}
 }

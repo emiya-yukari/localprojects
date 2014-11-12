@@ -4,34 +4,105 @@ import java.util.Stack;
 
 public class BoxGame {
 	
-	private Box box;
-	private GameMap gameMap;
-	private Man man;
-	private Stack<GameStatus> gameStack=new Stack<GameStatus>();
+	private Path manPath=new Path();
+	private Path boxPath=new Path();
 	
-	public BoxGame(GameMap gameMap) throws Exception{
-		box=new Box(gameMap);
-		man=new Man(gameMap);
+	
+	public void startGame(GameMap gameMap){
+		try{
+			gameMap.init();
+		}catch(Exception e){
+			return;
+		}
 		
-		this.gameMap=gameMap;
+		try{
+			go(null,gameMap);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
-	private void saveStatus(){
-		gameStack.push(new GameStatus(gameMap.getStatus(),box.getStatus(),man.getStatus()));
+	private void go(PathCell nextPath,GameMap gameMap) throws Exception{
+		
+		//在这个平行世界中推了箱子
+		Path manGoPath=null;
+		
+		if(nextPath!=null){							//第一次传入null
+		
+			manGoPath=this.manGetPath(gameMap.getMan(),gameMap.getBox(),gameMap,nextPath);
+			if(manGoPath.isEmpty()){
+				return;
+			}
+			manGoProcess(manGoPath,gameMap);
+			pushBox(nextPath,gameMap);
+			if(gameMap.hasArrived()){
+				throw new Exception("has arrived");
+			}
+		}
+		
+		//准备进入下个平行世界
+		
+		Stack<PathCell> boxNextStepStack=null;
+		
+		boxNextStepStack=StepTool.getNextStep(gameMap.getBox().getRow(), gameMap.getBox().getColumn(), gameMap.getTarget().getRow(), gameMap.getTarget().getColumn(), gameMap);
+
+		PathCell nextStep=null;
+			
+		while(!boxNextStepStack.isEmpty()){
+			nextStep=boxNextStepStack.pop();		//取出一个并且不为空
+			go(nextStep,gameMap.clone());
+		}
+		
+		//准备离开这个平行世界
+		
+		manPath.removeCell(manPath.getLastCell());
+		boxPath.removeCell(boxPath.getLastCell());
+		manPath.removePath(manGoPath);
 	}
 	
-	private void loadStatus(){
-		GameStatus gameStatus=gameStack.pop();
+	private Path manGetPath(Man man,Box box,GameMap gameMap,PathCell boxNextStepCell){
+		Path manGoPath=new Path();
+		PathCell manTargetCell=OppositeTool.getOppositeCell(boxNextStepCell.getRow(), boxNextStepCell.getColumn(), box.getRow(), box.getColumn(), gameMap);
 		
-		box.setBoxStatus(gameStatus.getBoxStatus());
-		man.setStatus(gameStatus.getManStatus());
-		gameMap.setStatus(gameStatus.getMapStatus());
+		//人不能到——这一格是墙或者边
+		if(manTargetCell==null){
+			return manGoPath;
+		}
+		
+		try{
+			PathTool.hasPath(man.getRow(), man.getColumn(), manTargetCell.getRow(), manTargetCell.getColumn(), gameMap, manGoPath);
+		}catch(Exception e){
+			;
+		}
+		
+		return manGoPath;
 	}
 	
-	public Object go(){
+	private void manGoProcess(Path path,GameMap gameMap){
+		PathCell manStartCell=path.getFirstCell();
+		PathCell manEndCell=path.getLastCell();
 		
+		gameMap.set(manStartCell.getRow(), manStartCell.getColumn(), GameMap.EMPTY);
+		gameMap.set(manEndCell.getRow(), manEndCell.getColumn(), GameMap.MAN);
 		
-		return null;
+		gameMap.getMan().setCell(manEndCell);
+		
+		manPath.addPath(path);
+	}
+	
+	private void pushBox(PathCell nextStep, GameMap gameMap){
+		PathCell boxStartCell=new PathCell(gameMap.getBox().getRow(),gameMap.getBox().getColumn());
+		PathCell manStartCell=new PathCell(gameMap.getMan().getRow(),gameMap.getMan().getColumn());
+		
+		gameMap.set(nextStep.getRow(), nextStep.getColumn(), GameMap.BOX);
+		gameMap.set(boxStartCell.getRow(), boxStartCell.getColumn(), GameMap.MAN);
+		gameMap.set(manStartCell.getRow(), manStartCell.getColumn(), GameMap.EMPTY);
+		
+		gameMap.getBox().setCell(nextStep);
+		gameMap.getMan().setCell(boxStartCell);
+		
+		manPath.addCell(gameMap.getMan().getCell());
+		boxPath.addCell(gameMap.getBox().getCell());
 	}
 	
 }

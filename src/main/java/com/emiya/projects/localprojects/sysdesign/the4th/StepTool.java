@@ -35,6 +35,7 @@ public class StepTool {
 	}
 	
 	private static boolean isEmpty(PathCell cell,GameMap gameMap){
-		return gameMap.getCell(cell.getRow(), cell.getColumn()).equals(GameMap.EMPTY)||gameMap.getCell(cell.getRow(), cell.getColumn()).equals(GameMap.TARGET);
+		return gameMap.isEmpty(cell.getRow(), cell.getColumn());
 	}
+	
 }
