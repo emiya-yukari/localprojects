@@ -31,4 +31,8 @@ public class PathCell {
 	public PathCell getRight(){
 		return new PathCell(row, column+1);
 	}
+	
+	public boolean equals(PathCell cell){
+		return this.getRow()==cell.getRow()&&this.getColumn()==cell.getColumn();
+	}
 }

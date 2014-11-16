@@ -12,7 +12,7 @@ public class OppositeTool {
 		if(gameMap.getCell(cell.getRow(), cell.getColumn()).equals(GameMap.MAN))
 			return cell;
 		
-		return gameMap.isEmpty(cell.getRow(), cell.getColumn())==true?cell:null;
+		return gameMap.manCanStand(cell.getRow(), cell.getColumn())==true?cell:null;
 	}
 	
 	public static PathCell getOppositeCell(int targetRow, int targetColumn, int pointRow, int pointColumn){

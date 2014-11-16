@@ -3,8 +3,8 @@ package com.emiya.projects.localprojects.sysdesign.the4th;
 public class GameMap {
 	
 	public final static String BLOCK="#";
-	public final static String MAN="C";
-	public final static String EMPTY=" ";
+	public final static String MAN="S";
+	public final static String EMPTY=".";
 	public final static String BOX="B";
 	public final static String TARGET="T";
 	public final static String ERROR="R";
@@ -78,7 +78,7 @@ public class GameMap {
 		
 		for(int i=0;i<this.getRowsLength();i++){
 			for(int j=0;j<this.getColumnsLength();j++){
-				if(this.getCell(i, j)==GameMap.BOX){
+				if(this.getCell(i, j).equals(GameMap.BOX)){
 					return new Box(i,j);
 				}
 			}
@@ -92,7 +92,7 @@ public class GameMap {
 		
 		for(int i=0;i<this.getRowsLength();i++){
 			for(int j=0;j<this.getColumnsLength();j++){
-				if(this.getCell(i, j)==GameMap.MAN){
+				if(this.getCell(i, j).equals(GameMap.MAN)){
 					return new Man(i,j);
 				}
 			}
@@ -104,7 +104,7 @@ public class GameMap {
 	private Target findTarget() throws Exception{
 		for(int i=0;i<this.getRowsLength();i++){
 			for(int j=0;j<this.getColumnsLength();j++){
-				if(this.getCell(i, j)==GameMap.TARGET){
+				if(this.getCell(i, j).equals(GameMap.TARGET)){
 					return new Target(i,j);
 				}
 			}
@@ -113,8 +113,12 @@ public class GameMap {
 		throw new Exception("no target.");
 	}
 	
-	public boolean isEmpty(int row, int column){
-		return this.getCell(row, column)==EMPTY||this.getCell(row, column)==TARGET||this.getCell(row, column)==BOX;
+	public boolean boxCanStand(int row, int column){
+		return this.getCell(row, column).equals(EMPTY)||this.getCell(row, column).equals(TARGET)||this.getCell(row, column).equals(BOX)||this.getCell(row, column).equals(MAN);
+	}
+	
+	public boolean manCanStand(int row, int column){
+		return this.getCell(row, column).equals(EMPTY)||this.getCell(row, column).equals(TARGET)||this.getCell(row, column).equals(MAN);
 	}
 	
 	@Override

@@ -7,19 +7,24 @@ public class BoxGame {
 	private Path manPath=new Path();
 	private Path boxPath=new Path();
 	
-	
-	public void startGame(GameMap gameMap){
+	public Path getManPath() {
+		return manPath;
+	}
+
+	public Path getBoxPath() {
+		return boxPath;
+	}
+
+	public void startGame(GameMap gameMap) throws Exception{
 		try{
 			gameMap.init();
-		}catch(Exception e){
-			return;
-		}
-		
-		try{
-			go(null,gameMap);
+			manPath.addCell(new PathCell(gameMap.getMan().getRow(),gameMap.getMan().getColumn()));
+			boxPath.addCell(new PathCell(gameMap.getBox().getRow(),gameMap.getBox().getColumn()));
 		}catch(Exception e){
 			e.printStackTrace();
+			return;	
 		}
+			go(null,gameMap);
 	}
 	
 	private void go(PathCell nextPath,GameMap gameMap) throws Exception{
@@ -35,8 +40,12 @@ public class BoxGame {
 			}
 			manGoProcess(manGoPath,gameMap);
 			pushBox(nextPath,gameMap);
+			gameMap.printMap();
 			if(gameMap.hasArrived()){
-				throw new Exception("has arrived");
+				//manPath.printPath();
+				//boxPath.printPath();
+				throw new SuccessException("has arrived");
+				
 			}
 		}
 		
@@ -60,6 +69,7 @@ public class BoxGame {
 		manPath.removePath(manGoPath);
 	}
 	
+	
 	private Path manGetPath(Man man,Box box,GameMap gameMap,PathCell boxNextStepCell){
 		Path manGoPath=new Path();
 		PathCell manTargetCell=OppositeTool.getOppositeCell(boxNextStepCell.getRow(), boxNextStepCell.getColumn(), box.getRow(), box.getColumn(), gameMap);
@@ -81,6 +91,9 @@ public class BoxGame {
 	private void manGoProcess(Path path,GameMap gameMap){
 		PathCell manStartCell=path.getFirstCell();
 		PathCell manEndCell=path.getLastCell();
+		
+		if(manStartCell.getRow()==manEndCell.getRow()&&manStartCell.getColumn()==manEndCell.getColumn())
+			return;
 		
 		gameMap.set(manStartCell.getRow(), manStartCell.getColumn(), GameMap.EMPTY);
 		gameMap.set(manEndCell.getRow(), manEndCell.getColumn(), GameMap.MAN);

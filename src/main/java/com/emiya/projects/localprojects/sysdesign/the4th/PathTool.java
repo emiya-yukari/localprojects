@@ -12,7 +12,7 @@ public class PathTool {
 		}
 
 		PathCell cellThisPlace=new PathCell(startRow,startColumn);
-		path.addCell(cellThisPlace);
+			path.addCell(cellThisPlace);
 		
 		if(startRow==endRow&&startColumn==endColumn){
 			throw new Exception("found");
@@ -48,7 +48,7 @@ public class PathTool {
 			}
 			
 			updateCellAround(cell,queue,theMap);
-			theMap.printMap();
+			//theMap.printMap();
 		}
 		
 		return null;
@@ -69,7 +69,7 @@ public class PathTool {
 			
 		//如果不是数字的话，当且只当它是空的时候直接写，否则退出
 		}catch(Exception e){
-			if(gameMap.isEmpty(targetCell.getRow(), targetCell.getColumn())){
+			if(gameMap.boxCanStand(targetCell.getRow(), targetCell.getColumn())){
 				gameMap.set(targetCell.getRow(), targetCell.getColumn(), String.valueOf(level));
 				queue.offer(targetCell);
 			}

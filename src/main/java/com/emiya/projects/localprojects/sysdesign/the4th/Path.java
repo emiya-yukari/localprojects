@@ -58,7 +58,7 @@ public class Path implements Comparable<Path>{
 	
 	public void printPath(){
 		for(PathCell tempCell:cellList)
-			System.out.print("( "+(tempCell.getRow()+1)+" , "+(tempCell.getColumn()+1)+" )->");
+			System.out.print("( "+tempCell.getRow()+" , "+tempCell.getColumn()+" )->");
 		System.out.println();
 	}
 	
@@ -78,8 +78,13 @@ public class Path implements Comparable<Path>{
 		return cellList.size();
 	}
 
+	
+	
+	@Override
 	public int compareTo(Path o) {
-		return this.size()>o.size()?1:-1;
+		return this.cellList.size()>o.getCellList().size()?-1:1;
 	}
+
+
 	
 }
